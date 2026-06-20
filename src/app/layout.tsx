@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { NavBar } from "@/components/nav-bar"
+import { SWRConfig } from "swr"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} dark h-full`}>
       <body className="min-h-full bg-background font-sans antialiased">
-        <NavBar />
-        {children}
+        <SWRConfig value={{ dedupingInterval: 5 * 60 * 1000, revalidateOnFocus: false, revalidateOnReconnect: false }}>
+          <NavBar />
+          {children}
+        </SWRConfig>
       </body>
     </html>
   )

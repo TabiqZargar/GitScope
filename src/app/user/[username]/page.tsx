@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect, use, useCallback } from "react"
-import type { GitHubUser, GitHubRepo, LanguageBreakdown } from "@/types/github"
-import { fetchUser, fetchRepos, fetchAllLanguages } from "@/lib/github"
+import { useState, use } from "react"
+import { useGitHubUser, useGitHubRepos, useGitHubLanguages } from "@/lib/github-hooks"
 import { computeDeveloperInsights } from "@/lib/insights"
 import { ProfileCard } from "@/components/profile-card"
 import { RepoStats } from "@/components/repo-stats"
@@ -13,39 +12,20 @@ import { DeveloperInsights } from "@/components/developer-insights"
 import { DashboardSkeleton } from "@/components/dashboard-skeleton"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { EmptyState } from "@/components/empty-state"
-import { ExportButton } from "@/components/export-button"
 import { Copy, Check, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function UserPage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = use(params)
-  const [user, setUser] = useState<GitHubUser | null>(null)
-  const [repos, setRepos] = useState<GitHubRepo[]>([])
-  const [languages, setLanguages] = useState<LanguageBreakdown>({})
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLangLoading, setIsLangLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const load = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const [userData, reposData] = await Promise.all([fetchUser(username), fetchRepos(username)])
-      setUser(userData)
-      setRepos(reposData)
-      setIsLangLoading(true)
-      fetchAllLanguages(username, reposData)
-        .then((l) => { setLanguages(l); setIsLangLoading(false) })
-        .catch(() => setIsLangLoading(false))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
-    } finally {
-      setIsLoading(false)
-    }
-  }, [username])
+  const { data: user, error: userError, isValidating: userLoading } = useGitHubUser(username)
+  const { data: reposData, error: reposError, isValidating: reposLoading } = useGitHubRepos(username)
+  const { data: languages, isValidating: langLoading } = useGitHubLanguages(username, user ? (reposData || null) : null)
 
-  useEffect(() => { load() }, [load])
+  const repos = reposData || []
+  const isLoading = userLoading || reposLoading
+  const error = userError || reposError
 
   const handleCopyUrl = async () => {
     try {
@@ -55,7 +35,7 @@ export default function UserPage({ params }: { params: Promise<{ username: strin
     } catch {}
   }
 
-  const insights = user ? computeDeveloperInsights(user, repos, languages) : null
+  const insights = user && repos.length > 0 ? computeDeveloperInsights(user, repos, languages || {}) : null
   const exportId = "gitscope-export"
 
   if (isLoading) {
@@ -74,7 +54,6 @@ export default function UserPage({ params }: { params: Promise<{ username: strin
             type={error.toLowerCase().includes("rate limit") ? "api-error" : error.toLowerCase().includes("not found") ? "not-found" : "api-error"}
             username={username}
             message={error}
-            onRetry={load}
           />
         </div>
       </div>
@@ -98,7 +77,6 @@ export default function UserPage({ params }: { params: Promise<{ username: strin
               {copied ? "Copied!" : "Copy URL"}
             </Button>
           </div>
-          <ExportButton elementId={exportId} filename={`gitscope-${user.login}`} />
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -109,7 +87,7 @@ export default function UserPage({ params }: { params: Promise<{ username: strin
         {insights && <DeveloperInsights data={insights} />}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <LanguageChart languages={languages} isLoading={isLangLoading} />
+          <LanguageChart languages={languages || {}} isLoading={langLoading} />
           <ContributionActivity repos={repos} />
         </div>
 

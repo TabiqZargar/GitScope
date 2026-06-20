@@ -15,7 +15,6 @@ import { DeveloperInsights } from "@/components/developer-insights"
 import { DashboardSkeleton } from "@/components/dashboard-skeleton"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { EmptyState } from "@/components/empty-state"
-import { ExportButton } from "@/components/export-button"
 import { Separator } from "@/components/ui/separator"
 import { Copy, Check, ExternalLink, BarChart3, Code2, GitCommitHorizontal, Lightbulb, FolderOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -138,7 +137,6 @@ function HomeContent() {
                 </Button>
               </span>
             </div>
-            <ExportButton elementId={exportId} filename={`gitscope-${user.login}`} />
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

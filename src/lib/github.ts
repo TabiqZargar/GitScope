@@ -71,10 +71,15 @@ export async function fetchLanguages(username: string, repoName: string): Promis
 
 export async function fetchAllLanguages(username: string, repos: GitHubRepo[]): Promise<LanguageBreakdown> {
   const languageTotals: LanguageBreakdown = {}
-  const batchSize = 5
 
-  for (let i = 0; i < repos.length; i += batchSize) {
-    const batch = repos.slice(i, i + batchSize)
+  const topRepos = repos
+    .filter((r) => !r.fork)
+    .sort((a, b) => b.stargazers_count - a.stargazers_count)
+    .slice(0, 30)
+
+  const batchSize = 5
+  for (let i = 0; i < topRepos.length; i += batchSize) {
+    const batch = topRepos.slice(i, i + batchSize)
     const results = await Promise.allSettled(
       batch.map((repo) => fetchLanguages(username, repo.name))
     )
