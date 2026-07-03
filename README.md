@@ -1,57 +1,36 @@
-# GitScope — GitHub Profile Analyzer
-
-A developer-focused tool for analyzing GitHub profiles — language distribution, contribution activity, repository analytics, and developer insights.
-
-Built with Next.js, TypeScript, Tailwind CSS, shadcn/ui, and Recharts.
-
-## Features
-
-- **Profile Analytics** — View followers, repos, stars, forks, account age, and more
-- **Language Distribution** — Interactive donut chart + horizontal bars with per-language breakdown
-- **Repository Analytics** — Sort, filter, and analyze repos by stars, forks, language, activity
-- **Contribution Activity** — Timeline of creation, push, and update patterns
-- **Developer Insights** — AI-style summary, developer classification (Frontend/Backend/Full Stack/Mobile/Data/Generalist), top repos, key ratios
-- **Profile Comparison** — Compare two users side-by-side with winner badges and comparison charts
-- **Share & Export** — Shareable profile URLs, export as PNG or PDF
-- **GitHub Dark Mode** — UI styled after GitHub's dark theme (#0D1117)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
+First, run the development server:
+
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### GitHub Token (Optional)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Without a token, the GitHub API is limited to 60 requests/hour. Create a `.env.local` file:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-```bash
-cp .env.example .env.local
-```
+## Learn More
 
-Generate a token at [github.com/settings/tokens](https://github.com/settings/tokens) (no special scopes needed for public data) and add it to `.env.local`:
+To learn more about Next.js, take a look at the following resources:
 
-```
-GITHUB_TOKEN=your_token_here
-```
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-With a token, the limit increases to 5,000 requests/hour.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Usage
+## Deploy on Vercel
 
-- **Search** — Enter a GitHub username on the homepage to load their profile dashboard
-- **Direct URL** — Navigate to `/?user=username` or `/user/username`
-- **Compare** — Go to `/compare` to compare two profiles side by side
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## Tech Stack
-
-- [Next.js](https://nextjs.org/) 16 — App Router
-- [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/) v4
-- [shadcn/ui](https://ui.shadcn.com/) components
-- [Recharts](https://recharts.org/) — data visualization
-- [SWR](https://swr.vercel.app/) — client-side caching
-- [html2canvas](https://html2canvas.hertzen.com/) + [jsPDF](https://github.com/parallax/jsPDF) — export
-- [Lucide](https://lucide.dev/) — icons
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
