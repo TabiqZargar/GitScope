@@ -2,7 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { GitCompare, Home, Search, Bell, Settings } from "lucide-react"
+
+
+
 
 export function NavBar() {
   const pathname = usePathname()
@@ -40,27 +42,6 @@ export function NavBar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden items-center rounded-full border border-outline-variant/20 bg-surface-container px-4 py-1.5 md:flex">
-            <Search className="mr-2 size-[18px] text-on-surface-variant" />
-            <input
-              className="w-48 bg-transparent p-0 text-sm text-foreground placeholder:text-on-surface-variant focus:ring-0"
-              placeholder="Search Engineer..."
-              type="text"
-            />
-          </div>
-          <button className="rounded-full p-2 transition-all duration-300 hover:bg-surface-container-highest/50">
-            <Bell className="size-5 text-on-surface-variant" />
-          </button>
-          <button className="rounded-full p-2 transition-all duration-300 hover:bg-surface-container-highest/50">
-            <Settings className="size-5 text-on-surface-variant" />
-          </button>
-          <div className="size-8 overflow-hidden rounded-full border border-primary/30">
-            <div className="flex size-full items-center justify-center bg-surface-container-highest text-xs font-medium text-foreground">
-              G
-            </div>
-          </div>
-        </div>
       </div>
     </nav>
   )

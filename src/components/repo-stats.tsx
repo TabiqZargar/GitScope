@@ -83,9 +83,6 @@ export function RepoStats({ repos }: RepoStatsProps) {
             <div className="mt-4 flex items-end justify-between">
               <div>
                 <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
-                <span className="flex items-center gap-1 text-sm text-tertiary">
-                  <TrendingUp className="size-4" /> +12%
-                </span>
               </div>
               {stat.sparkline && (
                 <svg className="size-16 overflow-visible">
