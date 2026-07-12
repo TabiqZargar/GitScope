@@ -225,23 +225,6 @@ function HomeContent() {
               </div>
             </div>
           </section>
-
-          {/* CTA Section */}
-          <section className="w-full py-16">
-            <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[40px] border border-primary/20 bg-primary/5 p-16 backdrop-blur-md">
-              <div className="glow-orb absolute -right-20 -top-20 size-64 rounded-full bg-primary opacity-[0.15] blur-[100px]" />
-              <h2 className="mb-6 text-5xl font-bold">Ready to scope your engineering health?</h2>
-              <p className="mb-10 text-base text-on-surface-variant">Join 500+ engineering teams optimizing their development cycles with GitScope.</p>
-              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Button className="rounded-xl bg-primary px-8 py-6 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:shadow-xl active:scale-95">
-                  Get Started Free
-                </Button>
-                <Button variant="outline" className="rounded-xl border-outline-variant/50 bg-surface-container-highest/50 px-8 py-6 font-medium text-foreground transition-all hover:bg-surface-container-highest">
-                  Book a Demo
-                </Button>
-              </div>
-            </div>
-          </section>
         </>
       )}
 
