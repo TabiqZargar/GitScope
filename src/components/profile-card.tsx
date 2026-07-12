@@ -26,122 +26,100 @@ export function ProfileCard({ user }: ProfileCardProps) {
   })
 
   return (
-    <Card className="overflow-hidden transition-all hover:ring-1 hover:ring-primary/50">
-      <CardContent className="pt-6">
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-          <div className="group relative shrink-0">
-            <img
-              src={user.avatar_url}
-              alt={`${user.login}'s avatar`}
-              className="size-24 rounded-full ring-2 ring-border transition-all group-hover:ring-primary sm:size-28"
-            />
-            {user.hireable && (
-              <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-green-500 text-[10px] text-white shadow-lg" title="Available for hire">
-                H
-              </span>
-            )}
+    <Card className="glass-card relative overflow-hidden rounded-xl border-0 p-6">
+      {/* Hireable badge */}
+      {user.hireable && (
+        <div className="absolute right-4 top-4">
+          <span className="inline-flex items-center gap-1 rounded-full border border-tertiary/20 bg-tertiary/10 px-3 py-1 text-xs font-semibold text-tertiary">
+            <span className="size-1.5 animate-pulse rounded-full bg-tertiary" />
+            HIREABLE
+          </span>
+        </div>
+      )}
+
+      <div className="mt-4 flex flex-col items-center text-center">
+        {/* Avatar with rotating ring */}
+        <div className="relative mb-6">
+          <svg className="absolute -inset-2 size-[calc(100%+16px)] animate-rotate-ring" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a2c9ff" />
+                <stop offset="100%" stopColor="#d8baff" />
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="48" fill="none" stroke="url(#ring-gradient)" strokeDasharray="15 5" strokeWidth="2" />
+          </svg>
+          <div className="size-28 overflow-hidden rounded-full border-4 border-surface-container-lowest shadow-2xl">
+            <img src={user.avatar_url} alt={`${user.login}'s avatar`} className="size-full object-cover" />
           </div>
+        </div>
 
-          <div className="flex flex-1 flex-col items-center text-center sm:items-start sm:text-left">
-            <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-              <h2 className="text-xl font-bold">{user.name || user.login}</h2>
-              {user.hireable && (
-                <Badge variant="secondary" className="text-[10px] bg-green-500/10 text-green-400 border-green-500/30">
-                  HIRABLE
-                </Badge>
-              )}
-            </div>
-            <a
-              href={user.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              @{user.login}
-            </a>
+        <h2 className="text-3xl font-semibold">{user.name || user.login}</h2>
+        <a
+          href={user.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-base text-on-surface-variant transition-colors hover:text-primary"
+        >
+          @{user.login}
+        </a>
 
-            {user.bio && (
-              <p className="mt-2 text-sm text-foreground/80 max-w-lg line-clamp-2">{user.bio}</p>
-            )}
+        {user.bio && (
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground/80">{user.bio}</p>
+        )}
 
-            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground justify-center sm:justify-start">
+        <div className="mt-8 grid w-full grid-cols-2 gap-4 border-t border-outline-variant/20 pt-8">
+          <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+            <Users className="size-4 shrink-0" />
+            <span><strong className="text-foreground">{user.followers.toLocaleString()}</strong> followers</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+            <UserPlus className="size-4 shrink-0" />
+            <span><strong className="text-foreground">{user.following.toLocaleString()}</strong> following</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+            <ExternalLink className="size-4 shrink-0" />
+            <span><strong className="text-foreground">{user.public_repos}</strong> repos</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+            <Calendar className="size-4 shrink-0" />
+            <span className="truncate">Joined {joinedDate}</span>
+          </div>
+        </div>
+
+        {/* Extra details */}
+        {(user.location || user.company || user.blog || user.twitter_username) && (
+          <>
+            <Separator className="my-4" />
+            <div className="flex w-full flex-col gap-3 text-sm text-on-surface-variant">
               {user.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin className="size-3.5" />
-                  {user.location}
-                </span>
+                <div className="flex items-center gap-2">
+                  <MapPin className="size-4 shrink-0" />
+                  <span className="truncate">{user.location}</span>
+                </div>
               )}
               {user.company && (
-                <span className="flex items-center gap-1">
-                  <Building2 className="size-3.5" />
-                  {user.company}
-                </span>
+                <div className="flex items-center gap-2">
+                  <Building2 className="size-4 shrink-0" />
+                  <span className="truncate">{user.company}</span>
+                </div>
               )}
               {user.blog && (
-                <a
-                  href={user.blog.startsWith("http") ? user.blog : `https://${user.blog}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 hover:text-primary transition-colors"
-                >
-                  <Link className="size-3.5" />
-                  {new URL(user.blog.startsWith("http") ? user.blog : `https://${user.blog}`).hostname}
+                <a href={user.blog.startsWith("http") ? user.blog : `https://${user.blog}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 truncate transition-colors hover:text-primary">
+                  <Link className="size-4 shrink-0" />
+                  <span className="truncate">{new URL(user.blog.startsWith("http") ? user.blog : `https://${user.blog}`).hostname}</span>
                 </a>
               )}
               {user.twitter_username && (
-                <a
-                  href={`https://twitter.com/${user.twitter_username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 hover:text-primary transition-colors"
-                >
-                  <X className="size-3.5" />
-                  @{user.twitter_username}
+                <a href={`https://twitter.com/${user.twitter_username}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 truncate transition-colors hover:text-primary">
+                  <X className="size-4 shrink-0" />
+                  <span>@{user.twitter_username}</span>
                 </a>
               )}
-              <span className="flex items-center gap-1">
-                <Calendar className="size-3.5" />
-                Joined {joinedDate}
-              </span>
             </div>
-          </div>
-        </div>
-
-        <Separator className="my-4" />
-
-        <div className="flex flex-wrap items-center justify-center gap-6 sm:justify-start">
-          <a
-            href={`${user.html_url}?tab=followers`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm transition-colors hover:text-primary group"
-          >
-            <Users className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="font-semibold">{user.followers.toLocaleString()}</span>
-            <span className="text-muted-foreground">followers</span>
-          </a>
-          <a
-            href={`${user.html_url}?tab=following`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm transition-colors hover:text-primary group"
-          >
-            <UserPlus className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="font-semibold">{user.following.toLocaleString()}</span>
-            <span className="text-muted-foreground">following</span>
-          </a>
-          <a
-            href={`${user.html_url}?tab=repositories`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm transition-colors hover:text-primary group"
-          >
-            <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="font-semibold">{user.public_repos}</span>
-            <span className="text-muted-foreground">repositories</span>
-          </a>
-        </div>
-      </CardContent>
+          </>
+        )}
+      </div>
     </Card>
   )
 }

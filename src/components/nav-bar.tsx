@@ -2,48 +2,66 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { GitCompare, Home, BarChart3 } from "lucide-react"
+import { GitCompare, Home, Search, Bell, Settings } from "lucide-react"
 
 export function NavBar() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-          <svg className="size-5 text-primary" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-          </svg>
-          <span className="text-sm font-semibold">
-            Git<span className="text-primary">Scope</span>
-          </span>
-        </Link>
+    <nav className="sticky top-4 z-50 mx-auto w-[95%] max-w-7xl">
+      <div className="flex h-14 items-center justify-between rounded-full border border-outline-variant/30 bg-surface/80 px-6 shadow-xl shadow-primary/5 backdrop-blur-md">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+            <span className="font-bold tracking-tighter text-primary" style={{ fontSize: "24px", lineHeight: "32px" }}>
+              Git<span className="text-foreground">Scope</span>
+            </span>
+          </Link>
+          <div className="hidden items-center gap-6 md:flex">
+            <Link
+              href="/"
+              className={`text-sm font-medium transition-colors ${
+                pathname === "/"
+                  ? "border-b-2 border-primary pb-1 font-bold text-primary"
+                  : "text-on-surface-variant hover:text-foreground"
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/compare"
+              className={`text-sm font-medium transition-colors ${
+                pathname === "/compare"
+                  ? "border-b-2 border-primary pb-1 font-bold text-primary"
+                  : "text-on-surface-variant hover:text-foreground"
+              }`}
+            >
+              Compare
+            </Link>
+          </div>
+        </div>
 
-        <nav className="flex items-center gap-1">
-          <Link
-            href="/"
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-              pathname === "/"
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <Home className="size-3.5" />
-            Home
-          </Link>
-          <Link
-            href="/compare"
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-              pathname === "/compare"
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <GitCompare className="size-3.5" />
-            Compare
-          </Link>
-        </nav>
+        <div className="flex items-center gap-4">
+          <div className="hidden items-center rounded-full border border-outline-variant/20 bg-surface-container px-4 py-1.5 md:flex">
+            <Search className="mr-2 size-[18px] text-on-surface-variant" />
+            <input
+              className="w-48 bg-transparent p-0 text-sm text-foreground placeholder:text-on-surface-variant focus:ring-0"
+              placeholder="Search Engineer..."
+              type="text"
+            />
+          </div>
+          <button className="rounded-full p-2 transition-all duration-300 hover:bg-surface-container-highest/50">
+            <Bell className="size-5 text-on-surface-variant" />
+          </button>
+          <button className="rounded-full p-2 transition-all duration-300 hover:bg-surface-container-highest/50">
+            <Settings className="size-5 text-on-surface-variant" />
+          </button>
+          <div className="size-8 overflow-hidden rounded-full border border-primary/30">
+            <div className="flex size-full items-center justify-center bg-surface-container-highest text-xs font-medium text-foreground">
+              G
+            </div>
+          </div>
+        </div>
       </div>
-    </header>
+    </nav>
   )
 }

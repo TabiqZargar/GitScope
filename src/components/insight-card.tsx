@@ -1,7 +1,6 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { Card, CardContent } from "@/components/ui/card"
 
 interface InsightCardProps {
   label: string
@@ -13,21 +12,19 @@ interface InsightCardProps {
 
 export function InsightCard({ label, value, icon, trend, subtext }: InsightCardProps) {
   return (
-    <Card className="transition-all hover:ring-1 hover:ring-primary/50">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground truncate">{label}</p>
-            <p className="mt-1 text-lg font-bold tabular-nums truncate">{value}</p>
-            {subtext && (
-              <p className="text-[10px] text-muted-foreground mt-0.5">{subtext}</p>
-            )}
-          </div>
-          <div className="ml-3 flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary/80">
-            {icon}
-          </div>
+    <div className="glass-card rounded-xl p-4 transition-all">
+      <div className="flex items-start justify-between">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{label}</p>
+          <p className="mt-1 truncate text-lg font-bold tabular-nums">{value}</p>
+          {subtext && (
+            <p className="mt-0.5 text-[10px] text-on-surface-variant">{subtext}</p>
+          )}
         </div>
-      </CardContent>
-    </Card>
+        <div className="ml-3 flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface-container">
+          {icon}
+        </div>
+      </div>
+    </div>
   )
 }

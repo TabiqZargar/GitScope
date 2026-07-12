@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Search, RefreshCw, AlertTriangle, FolderOpen } from "lucide-react"
 
@@ -22,7 +21,7 @@ export function EmptyState({ type, onRetry, username, message }: EmptyStateProps
           </div>
         </div>
         <h2 className="mb-2 text-xl font-semibold">Search any GitHub developer</h2>
-        <p className="max-w-sm text-sm text-muted-foreground">
+        <p className="max-w-sm text-sm text-on-surface-variant">
           Enter a username above to view detailed analytics, language distribution, and contribution insights.
         </p>
       </div>
@@ -31,72 +30,60 @@ export function EmptyState({ type, onRetry, username, message }: EmptyStateProps
 
   if (type === "not-found") {
     return (
-      <Card className="border-destructive/30">
-        <CardContent className="flex flex-col items-center gap-4 py-12">
-          <div className="flex size-14 items-center justify-center rounded-full bg-destructive/10">
-            <Search className="size-7 text-destructive" />
-          </div>
-          <div className="text-center space-y-1">
-            <h3 className="text-lg font-semibold">{message && !message.toLowerCase().includes("not found") ? "Error" : "User Not Found"}</h3>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              {message || (username ? (
-                <>We couldn&apos;t find a GitHub user named <strong>{username}</strong>.</>
-              ) : (
-                "We couldn't find that GitHub user."
-              ))}
-              {!message && " Please check the spelling and try again."}
-            </p>
-          </div>
-          {onRetry && (
-            <Button variant="outline" onClick={onRetry} className="gap-2">
-              <RefreshCw className="size-4" />
-              Try Again
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+      <div className="glass-card rounded-xl border-destructive/30 p-8 text-center">
+        <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-destructive/10">
+          <Search className="size-7 text-destructive" />
+        </div>
+        <h3 className="mb-1 text-lg font-semibold">{message && !message.toLowerCase().includes("not found") ? "Error" : "User Not Found"}</h3>
+        <p className="mx-auto mb-4 max-w-sm text-sm text-on-surface-variant">
+          {message || (username ? (
+            <>We couldn&apos;t find a GitHub user named <strong>{username}</strong>.</>
+          ) : (
+            "We couldn't find that GitHub user."
+          ))}
+          {!message && " Please check the spelling and try again."}
+        </p>
+        {onRetry && (
+          <Button variant="outline" onClick={onRetry} className="gap-2">
+            <RefreshCw className="size-4" />
+            Try Again
+          </Button>
+        )}
+      </div>
     )
   }
 
   if (type === "no-repos") {
     return (
-      <Card>
-        <CardContent className="flex flex-col items-center gap-4 py-12">
-          <div className="flex size-14 items-center justify-center rounded-full bg-secondary">
-            <FolderOpen className="size-7 text-muted-foreground" />
-          </div>
-          <div className="text-center space-y-1">
-            <h3 className="text-lg font-semibold">No Repositories</h3>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              This user doesn&apos;t have any public repositories yet.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="glass-card rounded-xl p-8 text-center">
+        <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-surface-container">
+          <FolderOpen className="size-7 text-on-surface-variant" />
+        </div>
+        <h3 className="mb-1 text-lg font-semibold">No Repositories</h3>
+        <p className="text-sm text-on-surface-variant">
+          This user doesn&apos;t have any public repositories yet.
+        </p>
+      </div>
     )
   }
 
   if (type === "api-error") {
     return (
-      <Card className="border-destructive/30">
-        <CardContent className="flex flex-col items-center gap-4 py-12">
-          <div className="flex size-14 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="size-7 text-destructive" />
-          </div>
-          <div className="text-center space-y-1">
-            <h3 className="text-lg font-semibold">API Error</h3>
-            <p className="text-sm text-muted-foreground max-w-sm">
-              {message || "The GitHub API encountered an error. This could be a rate limit or temporary outage."}
-            </p>
-          </div>
-          {onRetry && (
-            <Button variant="outline" onClick={onRetry} className="gap-2">
-              <RefreshCw className="size-4" />
-              Retry
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+      <div className="glass-card rounded-xl border-destructive/30 p-8 text-center">
+        <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-destructive/10">
+          <AlertTriangle className="size-7 text-destructive" />
+        </div>
+        <h3 className="mb-1 text-lg font-semibold">API Error</h3>
+        <p className="mx-auto mb-4 max-w-sm text-sm text-on-surface-variant">
+          {message || "The GitHub API encountered an error. This could be a rate limit or temporary outage."}
+        </p>
+        {onRetry && (
+          <Button variant="outline" onClick={onRetry} className="gap-2">
+            <RefreshCw className="size-4" />
+            Retry
+          </Button>
+        )}
+      </div>
     )
   }
 

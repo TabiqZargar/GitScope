@@ -21,7 +21,6 @@ import { ExportProfileCard } from "@/components/export-profile-card";
 import { computeExportCardStats } from "@/lib/exportStats";
 import { Copy, Check, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 export default function UserPage({
   params,
 }: {
@@ -69,7 +68,7 @@ export default function UserPage({
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mx-auto max-w-7xl px-gutter py-12">
         <DashboardSkeleton />
       </div>
     );
@@ -77,7 +76,7 @@ export default function UserPage({
 
   if (error) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mx-auto max-w-7xl px-gutter py-12">
         <div className="mt-6">
           <EmptyState
             type={
@@ -98,7 +97,7 @@ export default function UserPage({
   if (!user) return null;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+    <div className="mx-auto max-w-7xl px-gutter py-12">
       {/* Hidden export card – captured by html-to-image */}
       {exportStats && (
         <div
@@ -128,7 +127,7 @@ export default function UserPage({
               href={user.html_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-primary transition-colors"
+              className="transition-colors hover:text-primary"
             >
               @{user.login}
             </a>
@@ -149,27 +148,52 @@ export default function UserPage({
           <ExportCardButton filename={`profile-${user.login}`} />
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-1">
-            <div id="profile-card-export">
-              <ProfileCard user={user} />
-            </div>
-          </div>
-          <div className="lg:col-span-2">
+        {/* 12-column grid layout */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+          {/* Column 1: Profile Panel (4 cols) */}
+          <aside className="space-y-6 md:col-span-4">
+            <ProfileCard user={user} />
+          </aside>
+
+          {/* Column 2 & 3: Stats & Content (8 cols) */}
+          <section className="space-y-6 md:col-span-8">
             <RepoStats repos={repos} />
-          </div>
+
+            {/* Insights banner */}
+            {insights && (
+              <div className="relative overflow-hidden rounded-xl border border-outline-variant/30 bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-8">
+                <div className="relative z-10">
+                  <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                    Engineering Insights
+                  </span>
+                  <h2 className="mb-4 text-3xl font-semibold">Developer Profile Summary</h2>
+                  <p className="mb-6 leading-relaxed text-on-surface-variant">{insights.summary}</p>
+                  <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+                    <span className="flex items-center gap-1">
+                      <span className="size-2 rounded-full bg-tertiary" /> Classified as{" "}
+                      <strong className="text-foreground">{insights.developerType}</strong>
+                    </span>
+                    <span className="text-outline-variant">|</span>
+                    <span className="flex items-center gap-1">
+                      Primary: <strong className="text-foreground">{insights.primaryLanguage || "N/A"}</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Charts Row */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <LanguageChart languages={languages || {}} isLoading={langLoading} />
+              <ContributionActivity repos={repos} />
+            </div>
+
+            {/* Repo Analytics */}
+            <ErrorBoundary>
+              <RepoAnalytics repos={repos} />
+            </ErrorBoundary>
+          </section>
         </div>
-
-        {insights && <DeveloperInsights data={insights} />}
-
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <LanguageChart languages={languages || {}} isLoading={langLoading} />
-          <ContributionActivity repos={repos} />
-        </div>
-
-        <ErrorBoundary>
-          <RepoAnalytics repos={repos} />
-        </ErrorBoundary>
       </div>
     </div>
   );

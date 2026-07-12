@@ -15,7 +15,6 @@ import { DeveloperInsights } from "@/components/developer-insights";
 import { DashboardSkeleton } from "@/components/dashboard-skeleton";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { EmptyState } from "@/components/empty-state";
-import { Separator } from "@/components/ui/separator";
 import { ExportCardButton } from "@/components/export-card-button";
 import { ExportProfileCard } from "@/components/export-profile-card";
 import { computeExportCardStats } from "@/lib/exportStats";
@@ -28,6 +27,7 @@ import {
   GitCommitHorizontal,
   Lightbulb,
   FolderOpen,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -109,7 +109,142 @@ function HomeContent() {
     user && repos.length > 0 ? computeExportCardStats(repos, languages) : null;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+    <div className="mx-auto max-w-7xl px-gutter py-12">
+      {/* Hero Section — always visible title + search */}
+      <section className="relative flex flex-col items-center pt-8 pb-4 text-center">
+        {/* Glow Orbs — shown only on initial state */}
+        {!searched && !isLoading && !error && (
+          <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-full -translate-x-1/2 -translate-y-1/2">
+            <div className="glow-orb absolute left-1/4 top-0 size-[400px] rounded-full bg-primary opacity-[0.15] blur-[100px]" />
+            <div className="glow-orb absolute bottom-0 right-1/4 size-[500px] rounded-full bg-secondary opacity-[0.15] blur-[100px]" />
+          </div>
+        )}
+
+        {/* Title — hidden when results are showing */}
+        {!searched && !isLoading && !error && (
+          <div className="animate-slide-up mb-8" style={{ animationDelay: "100ms" }}>
+            <div className="animate-float">
+              <h1 className="text-5xl font-bold tracking-tighter text-primary md:text-6xl">
+                Git<span className="text-foreground">Scope</span>
+              </h1>
+              <p className="mx-auto mt-2 max-w-lg text-base text-on-surface-variant">
+                Next-generation engineering intelligence for modern dev teams.
+                Understand your repositories like never before.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Search Container — always visible */}
+        <div className="w-full max-w-2xl px-4">
+          <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+        </div>
+      </section>
+
+      {/* Bento Grid + CTA — shown only on initial state */}
+      {!searched && !isLoading && !error && (
+        <>
+        <section className="w-full py-16">
+          <h2 className="mb-16 text-center text-3xl font-semibold animate-slide-up">
+            Core Intelligence Modules
+          </h2>
+          <div className="grid h-auto grid-cols-1 gap-6 md:h-[600px] md:grid-cols-6">
+              {/* Repository Analytics */}
+              <div className="flex flex-col justify-between rounded-2xl border border-outline-variant/30 bg-surface-container-low/50 p-8 transition-all hover:ring-1 hover:ring-primary/50 md:col-span-3">
+                <div>
+                  <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                    <BarChart3 className="size-6 text-primary" />
+                  </div>
+                  <h3 className="mb-2 text-2xl font-semibold">Repository Analytics</h3>
+                  <p className="text-base text-on-surface-variant">Deep dive into commit patterns, code churn, and contributor velocity over time.</p>
+                </div>
+                <div className="mt-8 flex h-32 items-end gap-1 overflow-hidden rounded-xl bg-surface-container-highest/30 px-4">
+                  <div className="h-[40%] w-full rounded-t-sm bg-primary/40" />
+                  <div className="h-[70%] w-full rounded-t-sm bg-primary/60" />
+                  <div className="h-[50%] w-full rounded-t-sm bg-primary" />
+                  <div className="h-[90%] w-full rounded-t-sm bg-primary/40" />
+                  <div className="h-[60%] w-full rounded-t-sm bg-primary/80" />
+                  <div className="h-[30%] w-full rounded-t-sm bg-primary" />
+                </div>
+              </div>
+
+              {/* Language Distribution */}
+              <div className="flex flex-col rounded-2xl border border-outline-variant/30 bg-surface-container-low/50 p-8 transition-all hover:ring-1 hover:ring-primary/50 md:col-span-3">
+                <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-secondary/10">
+                  <Code2 className="size-6 text-secondary" />
+                </div>
+                <h3 className="mb-2 text-2xl font-semibold">Language Distribution</h3>
+                <p className="mb-8 text-base text-on-surface-variant">Granular breakdown of technology stacks and file complexity across your codebase.</p>
+                <div className="flex flex-1 items-center justify-center">
+                  <div className="relative flex size-40 items-center justify-center rounded-full border-8 border-surface-container-highest">
+                    <div className="absolute inset-0 rounded-full border-8 border-primary" style={{ clipPath: "polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 50%)" }} />
+                    <span className="text-sm font-medium text-foreground">65% TS</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Activity Timeline */}
+              <div className="flex flex-col rounded-2xl border border-outline-variant/30 bg-surface-container-low/50 p-8 transition-all hover:ring-1 hover:ring-primary/50 md:col-span-2">
+                <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-tertiary/10">
+                  <GitCommitHorizontal className="size-6 text-tertiary" />
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Activity Timeline</h3>
+                <p className="mb-4 text-sm text-on-surface-variant">Real-time visualization of developer interaction pulses.</p>
+                <div className="mt-auto flex flex-col gap-2">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-surface-variant"><div className="h-full w-3/4 rounded-full bg-tertiary" /></div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-surface-variant"><div className="h-full w-1/2 rounded-full bg-tertiary" /></div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-surface-variant"><div className="h-full w-5/6 rounded-full bg-tertiary" /></div>
+                </div>
+              </div>
+
+              {/* Developer Insights */}
+              <div className="flex flex-col rounded-2xl border border-outline-variant/30 bg-surface-container-low/50 p-8 transition-all hover:ring-1 hover:ring-primary/50 md:col-span-2">
+                <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-primary-container/10">
+                  <Lightbulb className="size-6 text-primary" />
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Developer Insights</h3>
+                <p className="mb-4 text-sm text-on-surface-variant">Individual contribution metrics with focus on quality and impact.</p>
+                <div className="mt-6 flex -space-x-2">
+                  <div className="size-8 rounded-full border border-outline-variant bg-surface-container" />
+                  <div className="size-8 rounded-full border border-outline-variant bg-primary/40" />
+                  <div className="size-8 rounded-full border border-outline-variant bg-secondary/40" />
+                  <div className="flex size-8 items-center justify-center rounded-full border border-outline-variant bg-surface-container-highest text-[10px]">+12</div>
+                </div>
+              </div>
+
+              {/* Smart Filtering */}
+              <div className="flex flex-col rounded-2xl border border-outline-variant/30 bg-surface-container-low/50 p-8 transition-all hover:ring-1 hover:ring-primary/50 md:col-span-2">
+                <div className="mb-6 flex size-12 items-center justify-center rounded-xl bg-on-surface-variant/10">
+                  <Search className="size-6 text-on-surface-variant" />
+                </div>
+                <h3 className="mb-2 text-xl font-semibold">Smart Filtering</h3>
+                <p className="mb-4 text-sm text-on-surface-variant">Natural language queries for complex dataset manipulation.</p>
+                <div className="mt-6 rounded-lg bg-surface-container px-3 py-2 font-mono text-xs text-primary">
+                  query: commits &gt; 100 AND label: &quot;feat&quot;
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA Section */}
+          <section className="w-full py-16">
+            <div className="relative mx-auto max-w-3xl overflow-hidden rounded-[40px] border border-primary/20 bg-primary/5 p-16 backdrop-blur-md">
+              <div className="glow-orb absolute -right-20 -top-20 size-64 rounded-full bg-primary opacity-[0.15] blur-[100px]" />
+              <h2 className="mb-6 text-5xl font-bold">Ready to scope your engineering health?</h2>
+              <p className="mb-10 text-base text-on-surface-variant">Join 500+ engineering teams optimizing their development cycles with GitScope.</p>
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Button className="rounded-xl bg-primary px-8 py-6 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:shadow-xl active:scale-95">
+                  Get Started Free
+                </Button>
+                <Button variant="outline" className="rounded-xl border-outline-variant/50 bg-surface-container-highest/50 px-8 py-6 font-medium text-foreground transition-all hover:bg-surface-container-highest">
+                  Book a Demo
+                </Button>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
       {/* Hidden export card – captured by html-to-image */}
       {user && exportStats && (
         <div
@@ -130,60 +265,14 @@ function HomeContent() {
         </div>
       )}
 
-      <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-
-      {!searched && !isLoading && (
-        <div className="mt-10 animate-slide-up">
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {[
-              {
-                icon: BarChart3,
-                label: "Repository Analytics",
-                desc: "Stars, forks, size & language breakdown",
-              },
-              {
-                icon: Code2,
-                label: "Language Distribution",
-                desc: "Interactive donut chart & usage stats",
-              },
-              {
-                icon: GitCommitHorizontal,
-                label: "Activity Timeline",
-                desc: "Creation, push & update patterns",
-              },
-              {
-                icon: Lightbulb,
-                label: "Developer Insights",
-                desc: "Top repos, ratios & key metrics",
-              },
-              {
-                icon: FolderOpen,
-                label: "Smart Filtering",
-                desc: "Sort & filter repos by any criteria",
-              },
-            ].map((feature, i) => (
-              <div
-                key={feature.label}
-                className="group rounded-xl border border-border/50 bg-card/50 p-4 transition-all hover:border-primary/30 hover:bg-card hover:shadow-sm"
-                style={{ animationDelay: `${i * 80}ms` }}
-              >
-                <div className="mb-2 flex size-9 items-center justify-center rounded-lg bg-secondary/80 group-hover:bg-primary/10 transition-colors">
-                  <feature.icon className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                </div>
-                <h3 className="text-sm font-medium mb-0.5">{feature.label}</h3>
-                <p className="text-xs text-muted-foreground">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
+      {/* Loading skeleton */}
       {isLoading && (
         <div className="mt-6">
           <DashboardSkeleton />
         </div>
       )}
 
+      {/* Error state */}
       {error && !isLoading && (
         <div className="mt-6">
           <EmptyState
@@ -201,6 +290,7 @@ function HomeContent() {
         </div>
       )}
 
+      {/* Dashboard */}
       {user && !isLoading && (
         <div id={exportId} className="mt-6 space-y-6 animate-slide-up">
           {/* Export & Share bar */}
@@ -212,7 +302,7 @@ function HomeContent() {
                   href={user.html_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="transition-colors hover:text-primary"
                 >
                   @{user.login}
                 </a>

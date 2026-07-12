@@ -2,7 +2,6 @@
 
 import { useMemo } from "react"
 import type { GitHubRepo } from "@/types/github"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   BarChart,
   Bar,
@@ -28,8 +27,8 @@ interface ActivityData {
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-lg border border-border bg-card px-3 py-2 shadow-lg">
-      <p className="text-xs text-muted-foreground mb-1">{label}</p>
+    <div className="glass-card rounded-lg px-3 py-2 shadow-lg">
+      <p className="mb-1 text-xs text-on-surface-variant">{label}</p>
       {payload.map((entry: any) => (
         <p key={entry.name} className="text-xs" style={{ color: entry.color }}>
           {entry.name}: {entry.value}
@@ -85,66 +84,64 @@ export function ContributionActivity({ repos }: ContributionActivityProps) {
 
   if (!activityData.length) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <GitCommitHorizontal className="size-4 text-primary" />
-            Repository Activity
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex h-[200px] items-center justify-center text-sm text-muted-foreground">
-            No activity data available
-          </div>
-        </CardContent>
-      </Card>
+      <div className="glass-card rounded-xl p-6">
+        <div className="mb-6 flex items-center gap-2">
+          <GitCommitHorizontal className="size-4 text-primary" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Repository Activity</h3>
+        </div>
+        <div className="flex h-[200px] items-center justify-center text-sm text-on-surface-variant">
+          No activity data available
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <div className="glass-card rounded-xl p-6">
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <GitCommitHorizontal className="size-4 text-primary" />
-          Repository Activity
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={activityData} barGap={2} barCategoryGap="20%">
-              <CartesianGrid strokeDasharray="3 3" stroke="#30363d" vertical={false} />
-              <XAxis
-                dataKey="month"
-                tick={{ fill: "#8b949e", fontSize: 11 }}
-                tickLine={false}
-                axisLine={{ stroke: "#30363d" }}
-              />
-              <YAxis
-                tick={{ fill: "#8b949e", fontSize: 11 }}
-                tickLine={false}
-                axisLine={false}
-                allowDecimals={false}
-              />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "#21262d" }} />
-              <Bar dataKey="created" name="Created" fill="#3fb950" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="pushed" name="Pushed" fill="#58a6ff" radius={[2, 2, 0, 0]} />
-              <Bar dataKey="updated" name="Updated" fill="#d29922" radius={[2, 2, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Repository Activity</h3>
         </div>
-        <div className="mt-3 flex items-center justify-center gap-4 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <span className="size-2.5 rounded-sm bg-[#3fb950]" /> Created
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="size-2.5 rounded-sm bg-[#58a6ff]" /> Pushed
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="size-2.5 rounded-sm bg-[#d29922]" /> Updated
-          </span>
+        <div className="flex gap-2">
+          <span className="rounded bg-primary/20 px-2 py-0.5 text-[10px] text-primary">6M</span>
+          <span className="rounded bg-surface-container px-2 py-0.5 text-[10px] text-on-surface-variant">1Y</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+      <div className="h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={activityData} barGap={2} barCategoryGap="20%">
+            <CartesianGrid strokeDasharray="3 3" stroke="#31353c" vertical={false} />
+            <XAxis
+              dataKey="month"
+              tick={{ fill: "#8b919d", fontSize: 11 }}
+              tickLine={false}
+              axisLine={{ stroke: "#31353c" }}
+            />
+            <YAxis
+              tick={{ fill: "#8b919d", fontSize: 11 }}
+              tickLine={false}
+              axisLine={false}
+              allowDecimals={false}
+            />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "#31353c" }} />
+            <Bar dataKey="created" name="Created" fill="#3fb950" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="pushed" name="Pushed" fill="#a2c9ff" radius={[2, 2, 0, 0]} />
+            <Bar dataKey="updated" name="Updated" fill="#d29922" radius={[2, 2, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="mt-3 flex items-center justify-center gap-4 text-xs text-on-surface-variant">
+        <span className="flex items-center gap-1">
+          <span className="size-2.5 rounded-sm bg-[#3fb950]" /> Created
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="size-2.5 rounded-sm bg-[#a2c9ff]" /> Pushed
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="size-2.5 rounded-sm bg-[#d29922]" /> Updated
+        </span>
+      </div>
+    </div>
   )
 }

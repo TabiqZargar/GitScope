@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react"
 import type { GitHubRepo, SortOption, FilterOption } from "@/types/github"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Star, GitFork, Clock, ArrowUpDown, ExternalLink, FolderOpen } from "lucide-react"
@@ -66,98 +65,96 @@ export function TopRepos({ repos }: TopReposProps) {
   ]
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <FolderOpen className="size-4 text-primary" />
-            Repositories
-          </CardTitle>
-          <span className="text-xs text-muted-foreground">{repos.length} total</span>
+    <div className="glass-card rounded-xl p-6">
+      <div className="mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FolderOpen className="size-4 text-primary" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">Top Repositories</h3>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <div className="flex flex-wrap gap-1">
-            {filterOptions.map((opt) => (
-              <Button
-                key={opt.value}
-                variant={filterBy === opt.value ? "default" : "outline"}
-                size="xs"
-                onClick={() => setFilterBy(opt.value)}
-              >
-                {opt.label}
-              </Button>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-1">
-            {sortOptions.map((opt) => (
-              <Button
-                key={opt.value}
-                variant={sortBy === opt.value ? "secondary" : "ghost"}
-                size="xs"
-                onClick={() => setSortBy(opt.value)}
-              >
-                {sortBy === opt.value && <ArrowUpDown className="size-3" />}
-                {opt.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2">
-          {filteredAndSorted.map((repo) => (
-            <a
-              key={repo.id}
-              href={repo.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-between rounded-lg border border-border/50 bg-card/50 p-3 transition-all hover:border-primary/30 hover:bg-card hover:shadow-sm"
+        <span className="text-xs text-on-surface-variant">{repos.length} total</span>
+      </div>
+
+      <div className="mb-5 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1">
+          {filterOptions.map((opt) => (
+            <Button
+              key={opt.value}
+              variant={filterBy === opt.value ? "default" : "outline"}
+              size="xs"
+              onClick={() => setFilterBy(opt.value)}
             >
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium truncate group-hover:text-primary transition-colors">
-                    {repo.name}
-                  </span>
-                  {repo.fork && (
-                    <Badge variant="outline" className="text-[10px] h-4">
-                      fork
-                    </Badge>
-                  )}
-                  {repo.archived && (
-                    <Badge variant="outline" className="text-[10px] h-4 text-destructive border-destructive/30">
-                      archived
-                    </Badge>
-                  )}
-                </div>
-                {repo.description && (
-                  <p className="mt-0.5 text-xs text-muted-foreground line-clamp-1">{repo.description}</p>
-                )}
-                <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                  {repo.language && (
-                    <span className="flex items-center gap-1">
-                      <span className="size-2.5 rounded-full bg-primary" />
-                      {repo.language}
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1">
-                    <Star className="size-3" />
-                    {repo.stargazers_count}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <GitFork className="size-3" />
-                    {repo.forks_count}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="size-3" />
-                    {new Date(repo.updated_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-              <ExternalLink className="ml-3 size-4 shrink-0 text-muted-foreground opacity-0 transition-all group-hover:opacity-100" />
-            </a>
+              {opt.label}
+            </Button>
           ))}
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex flex-wrap gap-1">
+          {sortOptions.map((opt) => (
+            <Button
+              key={opt.value}
+              variant={sortBy === opt.value ? "secondary" : "ghost"}
+              size="xs"
+              onClick={() => setSortBy(opt.value)}
+            >
+              {sortBy === opt.value && <ArrowUpDown className="size-3" />}
+              {opt.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {filteredAndSorted.map((repo) => (
+          <a
+            key={repo.id}
+            href={repo.html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glass-card group flex items-center justify-between rounded-xl p-4 transition-all"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="truncate text-sm font-semibold transition-colors group-hover:text-primary">
+                  {repo.name}
+                </span>
+                {repo.fork && (
+                  <Badge variant="outline" className="h-4 text-[10px]">
+                    fork
+                  </Badge>
+                )}
+                {repo.archived && (
+                  <Badge variant="outline" className="h-4 border-destructive/30 text-[10px] text-destructive">
+                    archived
+                  </Badge>
+                )}
+              </div>
+              {repo.description && (
+                <p className="mt-0.5 truncate text-xs text-on-surface-variant">{repo.description}</p>
+              )}
+              <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-on-surface-variant">
+                {repo.language && (
+                  <span className="flex items-center gap-1">
+                    <span className="size-2.5 rounded-full bg-primary" />
+                    {repo.language}
+                  </span>
+                )}
+                <span className="flex items-center gap-1">
+                  <Star className="size-3" />
+                  {repo.stargazers_count}
+                </span>
+                <span className="flex items-center gap-1">
+                  <GitFork className="size-3" />
+                  {repo.forks_count}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="size-3" />
+                  {new Date(repo.updated_at).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+            <ExternalLink className="ml-3 size-4 shrink-0 text-on-surface-variant opacity-0 transition-all group-hover:opacity-100" />
+          </a>
+        ))}
+      </div>
+    </div>
   )
 }
