@@ -170,7 +170,10 @@ export default function ComparePage() {
           {/* Side by side profiles */}
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {[data.user1, data.user2].filter(Boolean).map((u, i) => {
-              const isWinner = Object.values(data.winners).filter(Boolean).includes(u!.login)
+              const wins = Object.values(data.winners).filter(v => v === u!.login).length
+              const opponentLogin = u!.login === data.user1!.login ? data.user2!.login : data.user1!.login
+              const opponentWins = Object.values(data.winners).filter(v => v === opponentLogin).length
+              const isWinner = wins > opponentWins
               return (
                 <div key={u!.id} className={`glass-card relative overflow-hidden rounded-[20px] p-8 ${isWinner ? "ring-1 ring-primary/30" : ""}`}>
                   {isWinner && (
