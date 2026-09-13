@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { NavBar } from "@/components/nav-bar"
+import { Footer } from "@/components/footer"
 import { SWRConfig } from "swr"
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function RootLayout({
         <SWRConfig value={{ dedupingInterval: 5 * 60 * 1000, revalidateOnFocus: false, revalidateOnReconnect: false }}>
           <NavBar />
           {children}
+          <Footer />
         </SWRConfig>
       </body>
     </html>

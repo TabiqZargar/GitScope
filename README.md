@@ -8,6 +8,7 @@
     <a href="#getting-started">Getting Started</a> •
     <a href="#project-structure">Structure</a> •
     <a href="#api">API</a> •
+    <a href="#support">Support</a> •
     <a href="#deployment">Deployment</a> •
     <a href="#license">License</a>
   </p>
@@ -206,6 +207,12 @@ Set in `src/app/layout.tsx`:
 - Revalidation on focus: off
 - Revalidation on reconnect: off
 - Error retry count: 2
+
+## Support / Contact
+
+For support or questions about GitScope, reach out to the official contact address:
+
+- **Email:** [zargartabiq@gmail.com](mailto:zargartabiq@gmail.com)
 
 ## Deployment
 
